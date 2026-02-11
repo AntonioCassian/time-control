@@ -39,9 +39,9 @@ export const AsideTime = () => {
                     <Text className="text-sm text-gray-600">Terça Feira, 23 de Dezembro</Text>
                     <LocationC />
                 </View>
-                <View>
-                    <Text className="font-mono text-4xl font-bold tracking-tight text-foreground text-black/50">
-                        00:57:28
+                <View className="flex flex-row items-center justify-center text-center border-8 border-gray-600 rounded-full h-28 w-28">
+                    <Text className="top-0 bottom-0 font-mono text-4xl font-bold leading-none tracking-tight text-foreground text-black/50">
+                        50 h
                     </Text>
                 </View>
 
