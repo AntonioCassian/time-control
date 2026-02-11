@@ -4,6 +4,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 import { useCameraPermissions } from 'expo-camera';
 import { useState } from "react";
 import { Camera } from "./ui/camera";
+import { LocationC } from "./location";
 
 export const AsideTime = () => {
     const [permission, requestPermission] = useCameraPermissions();
@@ -36,9 +37,10 @@ export const AsideTime = () => {
                 <View>
 
                     <Text className="text-sm text-gray-600">Terça Feira, 23 de Dezembro</Text>
+                    <LocationC />
                 </View>
                 <View>
-                    <Text className="text-foreground font-mono text-4xl font-bold tracking-tight text-black/50">
+                    <Text className="font-mono text-4xl font-bold tracking-tight text-foreground text-black/50">
                         00:57:28
                     </Text>
                 </View>
