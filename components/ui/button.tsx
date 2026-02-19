@@ -5,7 +5,7 @@ interface  ButtonProps{
     onPress?: () => void;
 }
 
-export const Button = ({title, onPress}: ButtonProps) => {
+export const MyButton = ({title, onPress}: ButtonProps) => {
     return (
         <>
             <TouchableOpacity style={{

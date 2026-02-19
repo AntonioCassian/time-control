@@ -1,5 +1,5 @@
 import { Modal, Text, View } from "react-native"
-import { Button } from "./ui/button"
+import { MyButton } from "./ui/button"
 import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 import { useCameraPermissions } from 'expo-camera';
 import { useState } from "react";
@@ -19,7 +19,7 @@ export const AsideTime = () => {
         return (
             <View>
                 <Text>Você precisa dar permssão para exibir a camêra!</Text>
-                <Button title="Pedir Permissão" onPress={requestPermission} />
+                <MyButton title="Pedir Permissão" onPress={requestPermission} />
             </View>
         )
     }
@@ -39,8 +39,8 @@ export const AsideTime = () => {
                     <Text className="text-sm text-gray-600">Terça Feira, 23 de Dezembro</Text>
                     <LocationC />
                 </View>
-                <View className="flex flex-row items-center justify-center text-center border-8 border-gray-600 rounded-full h-28 w-28">
-                    <Text className="top-0 bottom-0 font-mono text-4xl font-bold leading-none tracking-tight text-foreground text-black/50">
+                <View className="flex h-28 w-28 flex-row items-center justify-center rounded-full border-8 border-gray-600 text-center">
+                    <Text className="text-foreground bottom-0 top-0 font-mono text-4xl font-bold leading-none tracking-tight text-black/50">
                         50 h
                     </Text>
                 </View>
@@ -54,7 +54,7 @@ export const AsideTime = () => {
 
             <View className="mt-4">
 
-                <Button title="Registrar Ponto" onPress={OpenCamera} />
+                <MyButton title="Registrar Ponto" onPress={OpenCamera} />
             </View>
         </>
     )
