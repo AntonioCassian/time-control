@@ -1,13 +1,12 @@
 import { AsideTime } from '@/components/aside_time'
 import { Header } from '@/components/header'
-import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text } from 'react-native'
 
 export default function Home() {
   return (
-    <View className="flex-1 p-4 bg-gray-400">
+    <View className="flex-1 bg-gray-400 p-4">
       <Header />
 
       <Card>
@@ -24,7 +23,7 @@ export default function Home() {
         >
 
           <View className="flex-row items-center justify-center gap-2">
-            <View className="items-center justify-center w-8 h-8 rounded-full bg-slate-400">
+            <View className="h-8 w-8 items-center justify-center rounded-full bg-slate-400">
               <MaterialIcons size={18} name="history" color="#ffffff" />
             </View>
 
