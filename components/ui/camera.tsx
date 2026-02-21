@@ -107,13 +107,19 @@ export const Camera = ({ setOpen }: CameraProps) => {
                     <Button title='75%' onPress={() => setCameraZoom(0.75)} />
                     <Button title='100%' onPress={() => setCameraZoom(1)} />
                 </View> */}
-                <TouchableOpacity onPress={handleTakePicture} className='absolute bottom-2 w-full flex-row items-center justify-center'>
-                    <View className="h-28 w-28 flex-row items-center justify-center rounded-full border-8 border-gray-50 p-2">
-                        <View className="h-full w-full rounded-full bg-gray-50">
+                <View className='absolute bottom-2 w-full flex-row items-center justify-between p-2'>
+                    <View className=''><Button title="Fechar" onPress={() => setOpen(false)} /></View>
+                    <TouchableOpacity className='' onPress={handleTakePicture} >
+                        <View className="border-[6px] h-24 w-24 flex-row items-center justify-center rounded-full border-gray-50 p-3">
+                            <View className="h-full w-full rounded-full bg-gray-50">
 
+                            </View>
                         </View>
+                    </TouchableOpacity>
+                    <View className='w-[70px]'>
+                        
                     </View>
-                </TouchableOpacity>
+                </View>
             </CameraView>
 
             {/* <View>
@@ -122,7 +128,7 @@ export const Camera = ({ setOpen }: CameraProps) => {
             {photoFile &&
                 <Modal animationType="slide" transparent={false} className='flex-1'>
                     <View className='relative flex-1 flex-col items-center justify-between bg-black py-24'>
-                        <Image source={{ uri: photoFile }} className="!relative " style={{ width: '100%', height: "100%", position:"relative" }} />
+                        <Image source={{ uri: photoFile }} className="!relative " style={{ width: '100%', height: "100%", position: "relative" }} />
                         <View className='absolute bottom-3 z-50 w-full flex-1 flex-row justify-between'>
                             <Button title="Nova Foto" />
                             <MyButton title="Enviar Foto" />
