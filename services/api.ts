@@ -5,10 +5,10 @@ export const api = axios.create({
   timeout: 10000,
 });
 
-api.interceptors.request.use((config) => {
-  const token = "";
-  if (token && config.headers) {
-    config.headers["Authorization"] = `Bearer ${token}`;
-  }
-  return config;
-});
+// api.interceptors.request.use((config) => {
+//   const token = "";
+//   if (token && config.headers) {
+//     config.headers["Authorization"] = `Bearer ${token}`;
+//   }
+//   return config;
+// });
