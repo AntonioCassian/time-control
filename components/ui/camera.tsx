@@ -1,10 +1,10 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Dispatch, SetStateAction, useRef, useState } from "react";
 import Fontisto from '@expo/vector-icons/Fontisto';
-import { BarcodeScanningResult, CameraView } from "expo-camera"
-import { Button, Modal, Text, TouchableOpacity, View } from "react-native"
-import { MyButton as MyButton } from "./button"
+import { BarcodeScanningResult, CameraView } from "expo-camera";
 import { Image } from "expo-image";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Button, Modal, Text, TouchableOpacity, View } from "react-native";
+import { MyButton } from "./button";
 
 type CameraProps = {
     setOpen: Dispatch<SetStateAction<boolean>>;
@@ -60,6 +60,7 @@ export const Camera = ({ setOpen }: CameraProps) => {
                 base64: true
             };
             const photo = await cameraRef.current.takePictureAsync(options);
+            console.log("Photo uri", photo);
             if (photo) {
                 setPhotoFile(photo.uri);
             }
@@ -68,8 +69,12 @@ export const Camera = ({ setOpen }: CameraProps) => {
         }
     }
 
+    const handleNewPhoto = () => {
+    setPhotoFile(null);
+}
+
     return (
-        <View style={{ width: '100%', height: "100%" }} className="top fixed">
+        <View style={{ width: '100%', height: "100%" }} className="fixed top">
             <CameraView style={{ flex: 1, position: 'relative', width: '100%' }}
                 ref={cameraRef}
                 facing={cameraFacing}
@@ -107,17 +112,17 @@ export const Camera = ({ setOpen }: CameraProps) => {
                     <Button title='75%' onPress={() => setCameraZoom(0.75)} />
                     <Button title='100%' onPress={() => setCameraZoom(1)} />
                 </View> */}
-                <View className='absolute bottom-2 w-full flex-row items-center justify-between p-2'>
+                <View className='absolute flex-row items-center justify-between w-full p-2 bottom-2'>
                     <View className=''><Button title="Fechar" onPress={() => setOpen(false)} /></View>
                     <TouchableOpacity className='' onPress={handleTakePicture} >
                         <View className="border-[6px] h-24 w-24 flex-row items-center justify-center rounded-full border-gray-50 p-3">
-                            <View className="h-full w-full rounded-full bg-gray-50">
+                            <View className="w-full h-full rounded-full bg-gray-50">
 
                             </View>
                         </View>
                     </TouchableOpacity>
                     <View className='w-[70px]'>
-                        
+
                     </View>
                 </View>
             </CameraView>
@@ -127,10 +132,10 @@ export const Camera = ({ setOpen }: CameraProps) => {
             </View> */}
             {photoFile &&
                 <Modal animationType="slide" transparent={false} className='flex-1'>
-                    <View className='relative flex-1 flex-col items-center justify-between bg-black py-24'>
+                    <View className='relative flex-col items-center justify-between flex-1 py-24 bg-black'>
                         <Image source={{ uri: photoFile }} className="!relative " style={{ width: '100%', height: "100%", position: "relative" }} />
-                        <View className='absolute bottom-3 z-50 w-full flex-1 flex-row justify-between'>
-                            <Button title="Nova Foto" />
+                        <View className='absolute z-50 flex-row justify-between flex-1 w-full bottom-3'>
+                            <Button title="Nova Foto" onPress={handleNewPhoto} />
                             <MyButton title="Enviar Foto" />
                         </View>
                     </View>
