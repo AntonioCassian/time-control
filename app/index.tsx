@@ -4,6 +4,8 @@ import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
 
+import { useLoginMutation } from "@/mutations/useLoginMutation";
+
 export default function Index() {
   const router = useRouter();
   // const [location, setLocation] = useState<Location.LocationObject | null>(null);
@@ -34,24 +36,38 @@ export default function Index() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+  const { mutate, error, data } = useLoginMutation();
 
-  const handleLogin = () => {
-    console.log("Login:", { email, password });
+  const handleLogin = async () => {
     if (!email || !password) {
       alert("Preencha todos os campos");
       return;
     }
+    setIsLoading(true)
 
-    return router.replace("/(tabs)");
+    try {
+      const result = await mutate({ email, password }); // aqui await funciona
+      console.log("Login bem-sucedido", result);
+      router.replace("/(tabs)"); // navegação só após sucesso
+    } catch (err: any) {
+      alert("Erro no login: " + err.message);
+      setIsLoading(false)
+
+    }
   };
 
+  console.log("data", data); // aqui o valor inicial é undefined até a mutation completar
+
+  console.log('data', data)
+
   return (
-    <View className="flex-1 justify-center bg-red-600 px-6">
+    <View className="justify-center flex-1 px-6 bg-red-600">
       <StatusBar barStyle="light-content" />
 
-      <View className="rounded-3xl bg-white p-8 shadow-lg">
+      <View className="p-8 bg-white shadow-lg rounded-3xl">
         {/* Logo / Título */}
-        <View className="mb-8 items-center">
+        <View className="items-center mb-8">
           <Text className="text-3xl font-bold text-gray-800">
             <AntDesign name="clock-circle" size={24} color="black" /> time-control
           </Text>
@@ -64,7 +80,7 @@ export default function Index() {
         <View className="mb-4">
           <Text className="mb-2 text-gray-700">Email</Text>
           <TextInput
-            className="rounded-xl border border-gray-300 px-4 py-3"
+            className="px-4 py-3 border border-gray-300 rounded-xl"
             placeholder="Digite seu email"
             placeholderTextColor="#9CA3AF"
             value={email}
@@ -76,7 +92,7 @@ export default function Index() {
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Senha</Text>
           <TextInput
-            className="rounded-xl border border-gray-300 px-4 py-3"
+            className="px-4 py-3 border border-gray-300 rounded-xl"
             placeholder="Digite sua senha"
             placeholderTextColor="#9CA3AF"
             secureTextEntry
@@ -88,15 +104,21 @@ export default function Index() {
         {/* Botão */}
         <TouchableOpacity
           onPress={handleLogin}
-          className="items-center rounded-xl bg-red-600 py-4"
+          className="items-center py-4 bg-red-600 rounded-xl"
         >
-          <Text className="text-lg font-bold text-white">
-            Entrar
-          </Text>
+          {isLoading ?
+            <Text className="text-lg font-bold text-white">
+              Carregando...
+            </Text>
+            :
+            <Text>
+              Entrar
+            </Text>
+          }
         </TouchableOpacity>
 
         {/* Footer */}
-        <View className="mt-6 items-center">
+        <View className="items-center mt-6">
           <Text className="text-gray-500">
             Esqueceu a senha?
           </Text>
