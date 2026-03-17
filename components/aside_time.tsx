@@ -1,10 +1,11 @@
-import { Modal, Text, View } from "react-native"
-import { MyButton } from "./ui/button"
 import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 import { useCameraPermissions } from 'expo-camera';
 import { useState } from "react";
-import { Camera } from "./ui/camera";
+import { Modal, Text, View } from "react-native"
+
 import { LocationC } from "./location";
+import { MyButton } from "./ui/button"
+import { Camera } from "./ui/camera";
 
 export const AsideTime = () => {
     const [permission, requestPermission] = useCameraPermissions();

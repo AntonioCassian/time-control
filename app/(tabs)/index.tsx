@@ -1,8 +1,9 @@
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { Text,View } from 'react-native'
+
 import { AsideTime } from '@/components/aside_time'
 import { Header } from '@/components/header'
 import { Card } from '@/components/ui/card'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { View, Text } from 'react-native'
 
 export default function Home() {
   return (

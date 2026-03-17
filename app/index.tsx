@@ -1,8 +1,8 @@
+import AntDesign from "@expo/vector-icons/AntDesign";
+import * as Location from 'expo-location';
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import * as Location from 'expo-location';
 import { StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function Index() {
   const router = useRouter();

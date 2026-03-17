@@ -1,7 +1,8 @@
-import { Card } from "@/components/ui/card";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Text, TouchableOpacity, View } from "react-native";
+
+import { Card } from "@/components/ui/card";
 
 export default function Historico() {
     return (

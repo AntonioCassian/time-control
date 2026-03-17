@@ -4,6 +4,7 @@ import { BarcodeScanningResult, CameraView } from "expo-camera";
 import { Image } from "expo-image";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Button, Modal, Text, TouchableOpacity, View } from "react-native";
+
 import { MyButton } from "./button";
 
 type CameraProps = {

@@ -1,6 +1,6 @@
-import { useState } from "react";
 import * as Location from "expo-location";
-import { Text, View, Button, Alert, Linking } from "react-native";
+import { useState } from "react";
+import { Alert, Button, Linking,Text, View } from "react-native";
 
 export const LocationC = () => {
     const [location, setLocation] = useState<Location.LocationObject | null>(null);

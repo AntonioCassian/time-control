@@ -1,10 +1,10 @@
-import { Tabs } from "expo-router";
-import { HapticTab } from "@/components/ui/haptic-tab";
-
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Platform } from "react-native";
+import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { HapticTab } from "@/components/ui/haptic-tab";
 
 export default function TabLayout() {
 
