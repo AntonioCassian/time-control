@@ -21,7 +21,7 @@
       "distribution": "store",
       "autoIncrement": true,
       "android": {
-        "buildType": "aab"
+        "buildType": "app-bundle"   // <-- aqui, válido para Play Store
       }
     }
   },
