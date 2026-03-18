@@ -1,9 +1,11 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
 
+import { useAuth } from "@/contexts/AuthContext";
 import { useLoginMutation } from "@/mutations/useLoginMutation";
 
 export default function Index() {
@@ -36,30 +38,32 @@ export default function Index() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false)
-  const { mutate, error, data } = useLoginMutation();
+  const { login, isLoading } = useAuth();
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      alert("Preencha todos os campos");
-      return;
-    }
-    setIsLoading(true)
+  const handleLogin = () => login(email, password);
 
-    try {
-      const result = await mutate({ email, password }); // aqui await funciona
-      console.log("Login bem-sucedido", result);
-      router.replace("/(tabs)"); // navegação só após sucesso
-    } catch (err: any) {
-      alert("Erro no login: " + err.message);
-      setIsLoading(false)
 
-    }
-  };
+  // const handleLogin = async () => {
+  //   if (!email || !password) {
+  //     alert("Preencha todos os campos");
+  //     return;
+  //   }
+  //   setIsLoading(true)
 
-  console.log("data", data); // aqui o valor inicial é undefined até a mutation completar
+  //   try {
+  //     const result = await mutate({ email, password });
+  //     console.log("Login bem-sucedido", result);
+  //     await AsyncStorage.setItem("token", result.token);
+  //     router.replace("/(tabs)");
+  //   } catch (err: any) {
+  //     alert("Erro no login: " + err.message);
+  //     setIsLoading(false)
+  //   }
+  // };
 
-  console.log('data', data)
+  // console.log("data", data); // aqui o valor inicial é undefined até a mutation completar
+
+  // console.log('data', data)
 
   return (
     <View className="justify-center flex-1 px-6 bg-red-600">
