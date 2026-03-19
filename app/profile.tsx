@@ -10,9 +10,9 @@ export default function Profile() {
             <ScrollView contentContainerStyle={{ padding: 16 }}>
 
                 {/* Header */}
-                <Text className="mb-4 text-2xl font-bold text-gray-900">
+                {/* <Text className="mb-4 text-2xl font-bold text-gray-900">
                     Perfil
-                </Text>
+                </Text> */}
 
                 {/* Avatar + Nome */}
                 <View className="items-center rounded-xl bg-white p-6 shadow-sm">

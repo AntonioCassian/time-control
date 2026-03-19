@@ -37,9 +37,9 @@ export default function NotificationsScreen() {
   return (
     <View className="flex-1 bg-gray-100">
       <ScrollView contentContainerStyle={{ padding: 16 }}>
-        <Text className="mb-4 text-2xl font-bold text-gray-900">
+        {/* <Text className="mb-4 text-2xl font-bold text-gray-900">
           Notificações
-        </Text>
+        </Text> */}
 
         {notifications.map((item) => (
           <View

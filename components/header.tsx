@@ -1,4 +1,5 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { router } from "expo-router";
 import { Text, View } from "react-native";
 
 export const Header = () => {
@@ -24,7 +25,9 @@ export const Header = () => {
             {/* Lado direito */}
             <View className="flex-row items-center gap-3">
                 {/* Notificação */}
-                <View className="relative h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+                <View
+                onTouchEnd={() => router.push('/notifications')}
+                className="relative h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
                     <MaterialIcons name="notifications-none" size={22} color="#374151" />
 
                     <View className="absolute right-0 top-0 h-3 w-3 items-center justify-center rounded-full bg-red-500">
@@ -34,7 +37,7 @@ export const Header = () => {
                 </View>
 
                 {/* Avatar */}
-                <View className="h-10 w-10 items-center justify-center rounded-full bg-blue-500">
+                <View onTouchEnd={() => router.push('/profile')} className="h-10 w-10 items-center justify-center rounded-full bg-blue-500">
                     <Text className="font-bold text-white">A</Text>
                 </View>
             </View>
