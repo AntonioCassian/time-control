@@ -40,6 +40,13 @@ export default function TabLayout() {
               tabBarIcon: ({ color }) => <MaterialIcons size={28} name="history" color={color} />,
             }}
           />
+          <Tabs.Screen
+            name="notifications"
+            options={{
+              title: 'Notificações',
+              headerShown: false,
+            }}
+          />
           {/* <Tabs.Screen
         name="explore"
         options={{
