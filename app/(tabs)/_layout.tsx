@@ -47,6 +47,13 @@ export default function TabLayout() {
               headerShown: false,
             }}
           />
+          <Tabs.Screen
+            name="profile"
+            options={{
+              title: 'Perfil',
+              headerShown: false,
+            }}
+          />
           {/* <Tabs.Screen
         name="explore"
         options={{
