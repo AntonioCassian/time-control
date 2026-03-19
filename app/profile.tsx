@@ -2,9 +2,11 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import { ScrollView, Switch, Text, View } from "react-native";
 
+import { useAuth } from "@/contexts/AuthContext";
+
 export default function Profile() {
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-
+    const { logout } = useAuth()
     return (
         <View className="flex-1 bg-gray-100">
             <ScrollView contentContainerStyle={{ padding: 16 }}>
@@ -90,6 +92,7 @@ export default function Profile() {
 
                 <View
                     // onTouchEnd={handleLogout}
+                    onTouchEnd={logout}
                     className="mt-2 items-center justify-center rounded-xl bg-white py-4 shadow-sm"
                 >
                     <Text className="text-base font-bold text-red-500">
