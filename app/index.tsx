@@ -66,12 +66,11 @@ export default function Index() {
   // console.log('data', data)
 
   return (
-    <View className="justify-center flex-1 px-6 bg-red-600">
+    <View className="flex-1 justify-center bg-blue-600 px-6">
       <StatusBar barStyle="light-content" />
 
-      <View className="p-8 bg-white shadow-lg rounded-3xl">
-        {/* Logo / Título */}
-        <View className="items-center mb-8">
+      <View className="rounded-3xl bg-white p-8 shadow-lg">
+        <View className="mb-8 items-center">
           <Text className="text-3xl font-bold text-gray-800">
             <AntDesign name="clock-circle" size={24} color="black" /> time-control
           </Text>
@@ -84,7 +83,7 @@ export default function Index() {
         <View className="mb-4">
           <Text className="mb-2 text-gray-700">Email</Text>
           <TextInput
-            className="px-4 py-3 border border-gray-300 rounded-xl"
+            className="rounded-xl border border-gray-300 px-4 py-3"
             placeholder="Digite seu email"
             placeholderTextColor="#9CA3AF"
             value={email}
@@ -96,7 +95,7 @@ export default function Index() {
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Senha</Text>
           <TextInput
-            className="px-4 py-3 border border-gray-300 rounded-xl"
+            className="rounded-xl border border-gray-300 px-4 py-3"
             placeholder="Digite sua senha"
             placeholderTextColor="#9CA3AF"
             secureTextEntry
@@ -108,7 +107,7 @@ export default function Index() {
         {/* Botão */}
         <TouchableOpacity
           onPress={handleLogin}
-          className="items-center py-4 bg-red-600 rounded-xl"
+          className="items-center rounded-xl bg-blue-600 py-4"
         >
           {isLoading ?
             <Text className="text-lg font-bold text-white">
@@ -122,7 +121,7 @@ export default function Index() {
         </TouchableOpacity>
 
         {/* Footer */}
-        <View className="items-center mt-6">
+        <View className="mt-6 items-center">
           <Text className="text-gray-500">
             Esqueceu a senha?
           </Text>

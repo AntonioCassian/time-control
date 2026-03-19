@@ -6,11 +6,11 @@ import { Card } from "@/components/ui/card";
 
 export default function Historico() {
   return (
-    <View className="flex-1 px-4 pt-6 bg-gray-100">
+    <View className="flex-1 bg-gray-100 px-4 pt-6">
       
       {/* Header mês */}
-      <View className="flex-row items-center justify-between mb-4">
-        <TouchableOpacity className="p-2 bg-white rounded-full shadow-sm">
+      <View className="mb-4 flex-row items-center justify-between">
+        <TouchableOpacity className="rounded-full bg-white p-2 shadow-sm">
           <MaterialIcons name="keyboard-arrow-left" size={22} color="#374151" />
         </TouchableOpacity>
 
@@ -18,19 +18,19 @@ export default function Historico() {
           Janeiro de 2026
         </Text>
 
-        <TouchableOpacity className="p-2 bg-white rounded-full shadow-sm">
+        <TouchableOpacity className="rounded-full bg-white p-2 shadow-sm">
           <MaterialIcons name="keyboard-arrow-right" size={22} color="#374151" />
         </TouchableOpacity>
       </View>
 
       {/* Resumo */}
-      <Card className="p-4 mb-6 bg-white shadow-sm rounded-2xl">
+      <Card className="mb-6 rounded-2xl bg-white p-4 shadow-sm">
         <View className="flex-row items-center gap-3">
-          <View className="items-center justify-center w-12 h-12 bg-blue-500 rounded-full">
+          <View className="h-12 w-12 items-center justify-center rounded-full bg-blue-500">
             <MaterialIcons size={22} name="insights" color="#fff" />
           </View>
 
-          <View className="flex-row justify-between flex-1">
+          <View className="flex-1 flex-row justify-between">
             <View>
               <Text className="text-xs text-gray-500">Total do mês</Text>
               <Text className="text-xl font-bold text-gray-800">0h00</Text>
@@ -46,20 +46,20 @@ export default function Historico() {
 
       {/* Registros */}
       <View>
-        <Text className="mb-3 text-sm font-bold tracking-wide text-gray-500 uppercase">
+        <Text className="text-sm font-bold uppercase tracking-wide text-gray-500">
           Registros
         </Text>
 
         {/* Card do dia */}
-        <Card className="p-4 mb-3 bg-white shadow-sm rounded-2xl">
+        <Card className="mb-3 rounded-2xl bg-white p-4 shadow-sm">
           
           {/* Header do dia */}
-          <View className="flex-row items-center justify-between mb-3">
+          <View className="mb-3 flex-row items-center justify-between">
             <Text className="font-semibold text-gray-800">
               12 Jan 2026
             </Text>
 
-            <View className="px-2 py-1 bg-red-100 rounded-full">
+            <View className="rounded-full bg-red-100 px-2 py-1">
               <Text className="text-xs font-semibold text-red-600">
                 -0h22
               </Text>
@@ -72,7 +72,7 @@ export default function Historico() {
             {/* Entrada */}
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-3">
-                <View className="items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                <View className="h-10 w-10 items-center justify-center rounded-full bg-green-100">
                   <Ionicons name="enter-outline" size={18} color="green" />
                 </View>
                 <Text className="text-gray-700">Entrada</Text>
@@ -84,7 +84,7 @@ export default function Historico() {
             {/* Saída */}
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-3">
-                <View className="items-center justify-center w-10 h-10 bg-red-100 rounded-full">
+                <View className="h-10 w-10 items-center justify-center rounded-full bg-red-100">
                   <Ionicons name="exit-outline" size={18} color="red" />
                 </View>
                 <Text className="text-gray-700">Saída</Text>

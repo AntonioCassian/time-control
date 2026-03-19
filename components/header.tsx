@@ -24,12 +24,17 @@ export const Header = () => {
             {/* Lado direito */}
             <View className="flex-row items-center gap-3">
                 {/* Notificação */}
-                <View className="items-center justify-center w-10 h-10 bg-white rounded-full shadow-sm">
+                <View className="relative h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
                     <MaterialIcons name="notifications-none" size={22} color="#374151" />
+
+                    <View className="absolute right-0 top-0 h-3 w-3 items-center justify-center rounded-full bg-red-500">
+
+                    </View>
+
                 </View>
 
                 {/* Avatar */}
-                <View className="items-center justify-center w-10 h-10 bg-blue-500 rounded-full">
+                <View className="h-10 w-10 items-center justify-center rounded-full bg-blue-500">
                     <Text className="font-bold text-white">A</Text>
                 </View>
             </View>

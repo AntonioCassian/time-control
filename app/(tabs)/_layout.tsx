@@ -14,7 +14,9 @@ export default function TabLayout() {
       <SafeAreaView className={`${Platform.OS === 'ios' ? '' : ''} flex-1  bg-gray-200`}>
         <Tabs
           screenOptions={{
-            tabBarActiveTintColor: "#dc2626",
+            // tabBarActiveTintColor: "#dc2626",
+            tabBarActiveTintColor: "#2563EB",
+            tabBarInactiveTintColor: '#A1A1AA',
             headerShown: true,
             tabBarButton: HapticTab,
             headerStyle: {
@@ -27,7 +29,7 @@ export default function TabLayout() {
             options={{
               title: 'Home',
               headerShown: false,
-              tabBarIcon: ({ color }) => <MaterialIcons size={28} name="house" color={color} />,
+              tabBarIcon: ({ color }) => <MaterialIcons size={28} name="home" color={color} />,
             }}
           />
           <Tabs.Screen
