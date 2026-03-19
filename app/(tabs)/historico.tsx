@@ -5,44 +5,97 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { Card } from "@/components/ui/card";
 
 export default function Historico() {
-    return (
-        <View>
-            <View className="my-4 flex flex-row items-center justify-between">
-                <TouchableOpacity>
-                    <MaterialIcons name="keyboard-arrow-left" size={24} color="#282c34" />
-                </TouchableOpacity>
-                <Text className="text-[16px] font-semibold capitalize text-[#282c34]">Janeiro De 2026</Text>
-                <MaterialIcons name="keyboard-arrow-right" size={24} color="#282c34" />
-            </View>
-            <Card className="flex-row items-center gap-2">
-                <View className="h-10 w-10 items-center justify-center rounded-full bg-slate-400">
-                    <MaterialIcons size={20} name="history" color="#ffffff" />
-                </View>
-                <View className="flex-1 flex-row justify-between">
-                    <View className="flex-col items-start gap-1">
-                        <Text>Total do mês</Text>
-                        <Text className="text-[#282c34] font-bold text-xl">0h00</Text>
-                    </View>
-                    <View className="flex-col items-end gap-1">
-                        <Text>Dias</Text>
-                        <Text className="text-[#282c34] font-bold text-xl">1</Text>
-                    </View>
-                </View>
-            </Card>
+  return (
+    <View className="flex-1 px-4 pt-6 bg-gray-100">
+      
+      {/* Header mês */}
+      <View className="flex-row items-center justify-between mb-4">
+        <TouchableOpacity className="p-2 bg-white rounded-full shadow-sm">
+          <MaterialIcons name="keyboard-arrow-left" size={22} color="#374151" />
+        </TouchableOpacity>
+
+        <Text className="text-lg font-bold text-gray-800">
+          Janeiro de 2026
+        </Text>
+
+        <TouchableOpacity className="p-2 bg-white rounded-full shadow-sm">
+          <MaterialIcons name="keyboard-arrow-right" size={22} color="#374151" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Resumo */}
+      <Card className="p-4 mb-6 bg-white shadow-sm rounded-2xl">
+        <View className="flex-row items-center gap-3">
+          <View className="items-center justify-center w-12 h-12 bg-blue-500 rounded-full">
+            <MaterialIcons size={22} name="insights" color="#fff" />
+          </View>
+
+          <View className="flex-row justify-between flex-1">
             <View>
-                <Text className="mt-4 mb-2 text-base !text-[##6b7280] uppercase font-bold">Registros</Text>
-                <Card className="flex-row items-center gap-2 p-4 bg-white border-b-2 border-[#e5e7eb] rounded-xl flex-wrap relative">
-                    <View className="absolute right-2 top-4 rounded-sm bg-red-200 p-1">
-                        <Text className="font-semibold text-red-500">0h22</Text>
-                    </View>
-                    <View className="flex-row items-center justify-center gap-2 rounded-sm bg-slate-200 p-2">
-                        <View className="items-center justify-center">
-                            <Ionicons name="enter-outline" size={16} color="green" className="font-semibold" />
-                        </View>
-                        <Text className="text-sm text-[#6b7280]">15:25</Text>
-                    </View>
-                </Card>
+              <Text className="text-xs text-gray-500">Total do mês</Text>
+              <Text className="text-xl font-bold text-gray-800">0h00</Text>
             </View>
+
+            <View className="items-end">
+              <Text className="text-xs text-gray-500">Dias trabalhados</Text>
+              <Text className="text-xl font-bold text-gray-800">1</Text>
+            </View>
+          </View>
         </View>
-    );
+      </Card>
+
+      {/* Registros */}
+      <View>
+        <Text className="mb-3 text-sm font-bold tracking-wide text-gray-500 uppercase">
+          Registros
+        </Text>
+
+        {/* Card do dia */}
+        <Card className="p-4 mb-3 bg-white shadow-sm rounded-2xl">
+          
+          {/* Header do dia */}
+          <View className="flex-row items-center justify-between mb-3">
+            <Text className="font-semibold text-gray-800">
+              12 Jan 2026
+            </Text>
+
+            <View className="px-2 py-1 bg-red-100 rounded-full">
+              <Text className="text-xs font-semibold text-red-600">
+                -0h22
+              </Text>
+            </View>
+          </View>
+
+          {/* Timeline */}
+          <View className="gap-3">
+            
+            {/* Entrada */}
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center gap-3">
+                <View className="items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                  <Ionicons name="enter-outline" size={18} color="green" />
+                </View>
+                <Text className="text-gray-700">Entrada</Text>
+              </View>
+
+              <Text className="font-semibold text-gray-800">08:00</Text>
+            </View>
+
+            {/* Saída */}
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center gap-3">
+                <View className="items-center justify-center w-10 h-10 bg-red-100 rounded-full">
+                  <Ionicons name="exit-outline" size={18} color="red" />
+                </View>
+                <Text className="text-gray-700">Saída</Text>
+              </View>
+
+              <Text className="font-semibold text-gray-800">12:00</Text>
+            </View>
+
+          </View>
+        </Card>
+      </View>
+    </View>
+  );
 }
