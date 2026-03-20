@@ -1,12 +1,11 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
-import { Link, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import { StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { useLoginMutation } from "@/mutations/useLoginMutation";
 
 export default function Index() {
   const router = useRouter();
@@ -36,34 +35,43 @@ export default function Index() {
   //   text = JSON.stringify(location);
   // }
 
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoading } = useAuth();
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const { login, isLoading, error } = useAuth();
 
-  const handleLogin = () => login(email, password);
+  const handleLogin = async () => {
+    // Reset erros anteriores
+    setEmailError("");
+    setPasswordError("");
 
+    let hasError = false;
+    if (!email) {
+      setEmailError("Email é obrigatório");
+      hasError = true;
+    }
+    if (!password) {
+      setPasswordError("Senha é obrigatória");
+      hasError = true;
+    }
 
-  // const handleLogin = async () => {
-  //   if (!email || !password) {
-  //     alert("Preencha todos os campos");
-  //     return;
-  //   }
-  //   setIsLoading(true)
+    if (hasError) return;
 
-  //   try {
-  //     const result = await mutate({ email, password });
-  //     console.log("Login bem-sucedido", result);
-  //     await AsyncStorage.setItem("token", result.token);
-  //     router.replace("/(tabs)");
-  //   } catch (err: any) {
-  //     alert("Erro no login: " + err.message);
-  //     setIsLoading(false)
-  //   }
-  // };
-
-  // console.log("data", data); // aqui o valor inicial é undefined até a mutation completar
-
-  // console.log('data', data)
+    try {
+      await login(email, password);
+    } catch (err: any) {
+      if (err.message.toLowerCase().includes("email")) {
+        setEmailError(err.message);
+      } else if (err.message.toLowerCase().includes("senha")) {
+        setPasswordError(err.message);
+      } else {
+        // erro genérico
+        setPasswordError(err.message || "Erro ao fazer login");
+      }
+    }
+  };
 
   return (
     <View className="flex-1 justify-center bg-blue-600 px-6">
@@ -89,6 +97,9 @@ export default function Index() {
             value={email}
             onChangeText={setEmail}
           />
+          {emailError ? (
+            <Text className="mt-1 text-sm text-red-500">{emailError}</Text>
+          ) : null}
         </View>
 
         {/* Senha */}
@@ -102,23 +113,29 @@ export default function Index() {
             value={password}
             onChangeText={setPassword}
           />
+          {passwordError ? (
+            <Text className="mt-1 text-sm text-red-500">{passwordError}</Text>
+          ) : null}
         </View>
 
         {/* Botão */}
+
         <TouchableOpacity
           onPress={handleLogin}
           className="items-center rounded-xl bg-blue-600 py-4"
+          disabled={isLoading}
         >
-          {isLoading ?
-            <Text className="text-lg font-bold text-white">
-              Carregando...
-            </Text>
-            :
-            <Text className="text-lg font-bold text-white">
-              Entrar
-            </Text>
-          }
+          <Text className="text-lg font-bold text-white">
+            {isLoading ? 'Carregando...' : 'Entrar'}
+          </Text>
         </TouchableOpacity>
+
+        {/* Exibe erro abaixo do botão */}
+        {error ? (
+          <Text className="mt-2 text-center text-sm text-red-500">
+            {error}
+          </Text>
+        ) : null}
 
         {/* Footer */}
         <View className="mt-6 items-center">

@@ -1,10 +1,10 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useEffect, useRef, useState } from "react";
-import { Animated, Easing, ScrollView, Switch, Text, View } from "react-native";
+import { useState } from "react";
+import { ScrollView, Switch, Text, View } from "react-native";
 
+import { InfoItem } from "@/components/info_items";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMe } from "@/mutations/useMe";
-import { InfoItem } from "@/components/info_items";
 
 export default function Profile() {
     const { data, isLoading, error } = useMe();
