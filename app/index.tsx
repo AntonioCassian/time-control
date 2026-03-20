@@ -83,7 +83,7 @@ export default function Index() {
         <View className="mb-4">
           <Text className="mb-2 text-gray-700">Email</Text>
           <TextInput
-            className="rounded-xl border border-gray-300 px-4 py-3"
+            className="rounded-xl border border-gray-300 px-4 py-3 text-gray-900"
             placeholder="Digite seu email"
             placeholderTextColor="#9CA3AF"
             value={email}
@@ -95,7 +95,7 @@ export default function Index() {
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Senha</Text>
           <TextInput
-            className="rounded-xl border border-gray-300 px-4 py-3"
+            className="rounded-xl border border-gray-300 px-4 py-3 text-gray-900"
             placeholder="Digite sua senha"
             placeholderTextColor="#9CA3AF"
             secureTextEntry
@@ -114,7 +114,7 @@ export default function Index() {
               Carregando...
             </Text>
             :
-            <Text>
+            <Text className="text-lg font-bold text-white">
               Entrar
             </Text>
           }

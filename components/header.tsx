@@ -2,19 +2,30 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
 import { Text, View } from "react-native";
 
+import { useMe } from "@/mutations/useMe";
+
 export const Header = () => {
+    const { data, isLoading, error } = useMe();
+
+    const user = data as any;
+
+    const firstName = user?.name.split(' ')[0];
+    const firstLetter = user?.name.charAt(0);
+    
+
     const today = new Date().toLocaleDateString("pt-BR", {
         weekday: "long",
         day: "2-digit",
         month: "long",
     });
+    
     return (
         <View className="flex-row items-center justify-between">
             {/* Lado esquerdo */}
             <View>
                 <Text className="text-sm text-gray-500">Olá 👋</Text>
                 <Text className="text-2xl font-bold text-gray-900">
-                    Antonio
+                    {firstName}
                 </Text>
 
                 <Text className="mt-1 text-xs text-gray-400">
@@ -38,7 +49,7 @@ export const Header = () => {
 
                 {/* Avatar */}
                 <View onTouchEnd={() => router.push('/profile')} className="h-10 w-10 items-center justify-center rounded-full bg-blue-500">
-                    <Text className="font-bold text-white">A</Text>
+                    <Text className="font-bold text-white">{firstLetter}</Text>
                 </View>
             </View>
         </View>
