@@ -1,79 +1,56 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { QueryClient } from "@tanstack/react-query";
-import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-import { AuthContext } from "@/contexts/AuthContext";
-import { useLoginMutation } from "@/mutations/useLoginMutation";
+import { api } from "@/services/api";
 
-interface AuthProviderProps {
-    children: React.ReactNode;
-    queryClient: QueryClient;
+export interface AuthContextProps {
+    token: string | null;
+    login: (username: string, password: string) => Promise<void>;
+    logout: () => void;
+    isAuthenticated: boolean;
+    isLoading: boolean;
 }
 
-export const AuthProvider = ({ children, queryClient }: AuthProviderProps) => {
-    const { mutate: mutateLogin } = useLoginMutation();
+const AuthContext = createContext({} as AuthContextProps);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string>(""); 
+    
     useEffect(() => {
         const loadToken = async () => {
-            try {
-                const savedToken = await AsyncStorage.getItem('token');
-                if (savedToken) setToken(savedToken);
-            } catch (err) {
-                console.error("Erro ao carregar token:", err);
-            } finally {
-                setIsLoading(false);
+            const savedToken = await AsyncStorage.getItem('access_token');
+            if (savedToken) {
+                setToken(savedToken);
             }
+            setIsLoading(false);
         };
         loadToken();
     }, []);
 
-    const login = async (email: string, password: string) => {
-        setError("");
-
-        if (!email || !password) {
-            setError("Email e senha são obrigatórios");
-            return;
-        }
-
-        setIsLoading(true);
-
+    const login = async (username: string, password: string) => {
         try {
-            const result = await mutateLogin({ email, password });
+            const response = await api.post('/auth/login', { username, password });
+            const accessToken = response?.data?.token;
 
-            if (!result?.token) {
-                setError("Token não recebido do servidor");
-                return;
-            }
-
-            await AsyncStorage.setItem('token', result.token);
-            setToken(result.token);
-
-            router.replace('/(tabs)');
-        } catch (err: any) {
-            console.error('Login error:', err);
-            setError(err?.message || "Erro ao fazer login");
-        } finally {
-            setIsLoading(false);
+            setToken(accessToken);
+            await AsyncStorage.setItem('access_token', accessToken);
+        } catch (error) {
+            console.error('Erro ao fazer login:', error);
+            throw error; 
         }
     };
-    
     const logout = async () => {
-        try {
-            await AsyncStorage.removeItem('token');
-            setToken(null);
-            queryClient.clear();
-            router.replace('/');
-        } catch (err) {
-            console.error("Erro ao deslogar:", err);
-        }
+        setToken(null);
+        await AsyncStorage.removeItem('access_token');
     };
 
     return (
-        <AuthContext.Provider value={{ token, isLoading, error, login, logout }}>
+        <AuthContext.Provider value={{ token, login, logout, isAuthenticated: !!token, isLoading }}>
             {children}
         </AuthContext.Provider>
     );
 };
+
+export const useAuth = () => useContext(AuthContext);
+

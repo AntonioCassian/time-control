@@ -5,7 +5,8 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/providers/AuthProvider";
+
 
 export default function Index() {
   const router = useRouter();
@@ -40,7 +41,7 @@ export default function Index() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const { login, isLoading, error } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const handleLogin = async () => {
     // Reset erros anteriores
@@ -131,11 +132,11 @@ export default function Index() {
         </TouchableOpacity>
 
         {/* Exibe erro abaixo do botão */}
-        {error ? (
+        {/* {error ? (
           <Text className="mt-2 text-center text-sm text-red-500">
             {error}
           </Text>
-        ) : null}
+        ) : null} */}
 
         {/* Footer */}
         <View className="mt-6 items-center">

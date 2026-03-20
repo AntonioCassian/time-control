@@ -6,7 +6,6 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 
-import { useAuth } from "@/contexts/AuthContext";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { queryClient } from "@/services/queryClient";
 
@@ -15,7 +14,7 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider queryClient={queryClient}>
+      <AuthProvider>
         {/* <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -30,27 +29,20 @@ export default function RootLayout() {
 
 
 const Root = () => {
-  const { token, isLoading } = useAuth();
+
 
   // Espera o layout montar antes de redirecionar
-  useEffect(() => {
-    if (!isLoading) {
-      if (token) {
-        router.replace("/(tabs)");
-      } else {
-        router.replace("/");
-      }
-    }
-  }, [token, isLoading]);
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     if (token) {
+  //       router.replace("/(tabs)");
+  //     } else {
+  //       router.replace("/");
+  //     }
+  //   }
+  // }, [token, isLoading]);
 
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
+  
   // ⚠️ Renderiza Slot imediatamente para o Router montar a navegação
   return (
     <Stack screenOptions={{
@@ -61,7 +53,7 @@ const Root = () => {
       // headerShadowVisible: false,
     }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen
         name="notifications"
         options={{

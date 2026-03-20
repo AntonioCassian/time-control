@@ -3,19 +3,19 @@ import { useState } from "react";
 import { ScrollView, Switch, Text, View } from "react-native";
 
 import { InfoItem } from "@/components/info_items";
-import { useAuth } from "@/contexts/AuthContext";
 import { useMe } from "@/mutations/useMe";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function Profile() {
-    const { data, isLoading, error } = useMe();
+    const { data, isLoading, error } = useMe(true);
+    const { logout } = useAuth()
 
-    const user = data as any;
+    const user = data;
 
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-    const { logout } = useAuth();
 
     const initial = user.name.charAt(0).toUpperCase();
-    if (error || !user) {
+    if (!user) {
         return (
             <View className="flex-1 items-center justify-center bg-gray-100">
                 <Text className="text-red-500">Erro ao carregar perfil</Text>

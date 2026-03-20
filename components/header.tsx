@@ -5,20 +5,19 @@ import { Text, View } from "react-native";
 import { useMe } from "@/mutations/useMe";
 
 export const Header = () => {
-    const { data, isLoading, error } = useMe();
+    const { data, isLoading, error } = useMe(true);
 
-    const user = data as any;
+    const user = data;
 
     const firstName = user?.name.split(' ')[0];
     const firstLetter = user?.name.charAt(0);
-    
+
 
     const today = new Date().toLocaleDateString("pt-BR", {
         weekday: "long",
         day: "2-digit",
         month: "long",
     });
-    
     return (
         <View className="flex-row items-center justify-between">
             {/* Lado esquerdo */}
@@ -37,8 +36,8 @@ export const Header = () => {
             <View className="flex-row items-center gap-3">
                 {/* Notificação */}
                 <View
-                onTouchEnd={() => router.push('/notifications')}
-                className="relative h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+                    onTouchEnd={() => router.push('/notifications')}
+                    className="relative h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
                     <MaterialIcons name="notifications-none" size={22} color="#374151" />
 
                     <View className="absolute right-0 top-0 h-3 w-3 items-center justify-center rounded-full bg-red-500">

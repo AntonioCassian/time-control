@@ -1,13 +1,21 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import { Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { HapticTab } from "@/components/ui/haptic-tab";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function TabLayout() {
-
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isAuthenticated, isLoading]);
   return (
     <>
       <StatusBar style="auto" translucent={true} />
