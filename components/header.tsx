@@ -18,6 +18,7 @@ export const Header = () => {
         day: "2-digit",
         month: "long",
     });
+    
     return (
         <View className="flex-row items-center justify-between">
             {/* Lado esquerdo */}
@@ -37,17 +38,17 @@ export const Header = () => {
                 {/* Notificação */}
                 <View
                     onTouchEnd={() => router.push('/notifications')}
-                    className="relative h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+                    className="relative items-center justify-center w-10 h-10 bg-white rounded-full shadow-sm">
                     <MaterialIcons name="notifications-none" size={22} color="#374151" />
 
-                    <View className="absolute right-0 top-0 h-3 w-3 items-center justify-center rounded-full bg-red-500">
+                    <View className="absolute top-0 right-0 items-center justify-center w-3 h-3 bg-red-500 rounded-full">
 
                     </View>
 
                 </View>
 
                 {/* Avatar */}
-                <View onTouchEnd={() => router.push('/profile')} className="h-10 w-10 items-center justify-center rounded-full bg-blue-500">
+                <View onTouchEnd={() => router.push('/profile')} className="items-center justify-center w-10 h-10 bg-blue-500 rounded-full">
                     <Text className="font-bold text-white">{firstLetter}</Text>
                 </View>
             </View>
