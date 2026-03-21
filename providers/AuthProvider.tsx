@@ -16,7 +16,7 @@ const AuthContext = createContext({} as AuthContextProps);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    
+
     useEffect(() => {
         const loadToken = async () => {
             const savedToken = await AsyncStorage.getItem('access_token');
@@ -28,9 +28,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loadToken();
     }, []);
 
-    const login = async (username: string, password: string) => {
+    const login = async (email: string, password: string) => {
         try {
-            const response = await api.post('/auth/login', { username, password });
+            const response = await api.post('/auth/login', { email, password });
             const accessToken = response?.data?.token;
 
             setToken(accessToken);

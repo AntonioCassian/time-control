@@ -1,56 +1,72 @@
 import * as Location from "expo-location";
-import { useState } from "react";
-import { Alert, Button, Linking,Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Alert, Linking } from "react-native";
 
-export const LocationC = () => {
-    const [location, setLocation] = useState<Location.LocationObject | null>(null);
-    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+export const useLocation = () => {
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    async function getLocation() {
-        let { status, canAskAgain } =
-            await Location.requestForegroundPermissionsAsync();
+  const getLocation = async () => {
+    try {
+      setLoading(true);
 
-        if (status !== "granted") {
-            if (!canAskAgain) {
-                // Permissão bloqueada permanentemente
-                Alert.alert(
-                    "Permissão bloqueada",
-                    "Você precisa ativar a localização nas configurações do app.",
-                    [
-                        { text: "Cancelar", style: "cancel" },
-                        {
-                            text: "Abrir Configurações",
-                            onPress: () => Linking.openSettings(),
-                        },
-                    ]
-                );
-            } else {
-                setErrorMsg("Permissão de localização negada");
-            }
-            return;
+      // 🔍 Verifica se GPS está ligado
+      const enabled = await Location.hasServicesEnabledAsync();
+
+      if (!enabled) {
+        setErrorMsg("GPS desativado. Ative sua localização.");
+        setLoading(false);
+        return;
+      }
+
+      // 🔐 Permissão
+      const { status, canAskAgain } =
+        await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        if (!canAskAgain) {
+          Alert.alert(
+            "Permissão bloqueada",
+            "Ative a localização nas configurações",
+            [
+              { text: "Cancelar", style: "cancel" },
+              {
+                text: "Abrir Configurações",
+                onPress: () => Linking.openSettings(),
+              },
+            ]
+          );
+        } else {
+          setErrorMsg("Permissão de localização negada");
         }
 
-        let currentLocation = await Location.getCurrentPositionAsync({});
-        setLocation(currentLocation);
-        setErrorMsg(null);
+        setLoading(false);
+        return;
+      }
+
+      // 📍 Pega localização
+      const current = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+
+      setLocation(current);
+      setErrorMsg(null);
+    } catch (err) {
+      setErrorMsg("Erro ao obter localização");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    let text = "Clique para obter localização";
+  useEffect(() => {
+    getLocation();
+  }, []);
 
-    if (errorMsg) text = errorMsg;
-
-    if (location) {
-        text = `Latitude: ${location.coords.latitude}
-Longitude: ${location.coords.longitude}`;
-    }
-
-    return (
-        <View style={{ padding: 20 }}>
-            <Text style={{ marginBottom: 10 }}>{text}</Text>
-            {!location &&
-
-                <Button title="Obter Localização" onPress={getLocation} />
-            }
-        </View>
-    );
+  return {
+    location,
+    errorMsg,
+    loading,
+    refreshLocation: getLocation,
+  };
 };

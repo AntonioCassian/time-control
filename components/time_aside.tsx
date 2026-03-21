@@ -1,9 +1,9 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useCameraPermissions } from "expo-camera";
 import { useState } from "react";
-import { Modal,Text, View } from "react-native";
+import { Modal, Text, View } from "react-native";
 
-import { LocationC } from "./location";
+import { useLocation } from "./location";
 import { MyButton } from "./ui/button";
 import { Camera } from "./ui/camera";
 import { Card } from "./ui/card";
@@ -20,11 +20,13 @@ export const TimeCircle = ({
   const [permission, requestPermission] = useCameraPermissions();
   const [open, setOpen] = useState(false);
 
+  const { location, errorMsg, loading, refreshLocation } = useLocation();
+
   if (!permission) return <View />;
 
   if (!permission.granted) {
     return (
-      <Card className="">
+      <Card>
         <Text className="mb-2 text-center text-gray-600">
           Você precisa dar permissão para usar a câmera
         </Text>
@@ -36,53 +38,91 @@ export const TimeCircle = ({
   return (
     <>
       <Modal visible={open} animationType="slide">
-        <Camera setOpen={setOpen} />
+        <Camera setOpen={setOpen} location={location} />
       </Modal>
 
-      <Card className="rounded-2xl bg-white p-5 shadow-sm">
-        {/* Data + localização */}
-        {/* <View className="mb-4 items-center">
-          <Text className="text-sm text-gray-500">
-            Terça-feira, 23 de Dezembro
-          </Text>
-          <LocationC />
-        </View> */}
+      <Card className="p-5 bg-white shadow-sm rounded-2xl">
+        {/* LOCALIZAÇÃO */}
+        <View className="items-center mb-4">
+          {!location && (<Text className="text-sm text-gray-500">
+            Verificação de localização
+          </Text>)}
 
-        {/* Círculo */}
-        <View className="mb-4 items-center justify-center">
-          <View className="h-32 w-32 items-center justify-center rounded-full border-8 border-green-500">
+          {loading && (
+            <Text className="mt-1 text-xs text-gray-400">
+              📍 Obtendo localização...
+            </Text>
+          )}
+
+          {errorMsg && (
+            <>
+              <Text className="mt-1 text-xs text-red-500">
+                {errorMsg}
+              </Text>
+
+              <MyButton
+                title="Ativar localização"
+                onPress={refreshLocation}
+              />
+            </>
+          )}
+
+          {/* {location && (
+            <>
+              <Text className="mt-1 text-xs text-green-600">
+                📍 Localização ativa
+              </Text>
+
+              <Text className="text-[10px] text-gray-400">
+                Lat: {location.coords.latitude.toFixed(4)} | Lng:{" "}
+                {location.coords.longitude.toFixed(4)}
+              </Text>
+            </>
+          )} */}
+        </View>
+
+        {/* CÍRCULO */}
+        <View className="items-center justify-center mb-4">
+          <View className="items-center justify-center w-32 h-32 border-8 border-green-500 rounded-full">
             <Text className="text-3xl font-bold text-gray-800">
               {hours}h
             </Text>
           </View>
 
-          <View className="mt-3 rounded-full bg-green-100 px-3 py-1">
+          <View className="px-3 py-1 mt-3 bg-green-100 rounded-full">
             <Text className="text-xs font-semibold text-green-700">
               {percentage.toFixed(0)}% da meta
             </Text>
           </View>
         </View>
 
-        {/* Próxima ação */}
-        <View className="mb-4 flex-row items-center justify-center gap-2 rounded-full bg-blue-100 p-2">
+        {/* PRÓXIMA AÇÃO */}
+        <View className="flex-row items-center justify-center gap-2 p-2 mb-4 bg-blue-100 rounded-full">
           <MaterialIcons name="schedule" size={18} color="#1d4ed8" />
           <Text className="text-sm font-semibold text-blue-700">
             Próximo: Entrada
           </Text>
         </View>
 
-        {/* Barra de progresso */}
-        <View className="mb-4 h-2 overflow-hidden rounded-full bg-gray-200">
+        {/* PROGRESSO */}
+        <View className="h-2 mb-4 overflow-hidden bg-gray-200 rounded-full">
           <View
             className="h-full bg-green-500"
             style={{ width: `${percentage}%` }}
           />
         </View>
 
-        {/* Botão */}
+        {/* BOTÃO */}
         <MyButton
           title="Registrar Ponto"
-          onPress={() => setOpen(true)}
+          onPress={() => {
+            if (!location) {
+              alert("Ative a localização primeiro");
+              return;
+            }
+
+            setOpen(true);
+          }}
         />
       </Card>
     </>
