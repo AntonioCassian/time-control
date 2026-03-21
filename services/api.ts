@@ -10,9 +10,16 @@ api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("access_token");
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers.set("Authorization", `Bearer ${token}`);
     }
-    config.headers["Content-Type"] = "application/json";
+
+    const isFormDataPayload =
+      typeof FormData !== "undefined" && config.data instanceof FormData;
+
+    if (!isFormDataPayload) {
+      config.headers.set("Content-Type", "application/json");
+    }
+
     return config;
   },
   (error) => {

@@ -3,7 +3,7 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import { CameraView } from "expo-camera";
 import { Image } from "expo-image";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { Button, Modal, TouchableOpacity, View } from "react-native";
+import { Button, Modal, Platform, TouchableOpacity, View } from "react-native";
 
 import { postClock } from "@/services/dot";
 
@@ -46,11 +46,17 @@ export const Camera = ({ setOpen, location }: CameraProps) => {
         formData.append("latitude", String(location.coords.latitude));
         formData.append("longitude", String(location.coords.longitude));
 
-        formData.append("photo", {
-            uri: photoFile,
-            name: "photo.jpg",
-            type: "image/jpeg",
-        } as any);
+        if (Platform.OS === "web") {
+            const photoResponse = await fetch(photoFile);
+            const photoBlob = await photoResponse.blob();
+            formData.append("photo", photoBlob, "photo.jpg");
+        } else {
+            formData.append("photo", {
+                uri: photoFile,
+                name: "photo.jpg",
+                type: "image/jpeg",
+            } as any);
+        }
 
         try {
             const result = await postClock(formData);

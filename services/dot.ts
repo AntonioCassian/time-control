@@ -2,11 +2,7 @@ import { api } from "./api";
 
 export const postClock = async (formData: FormData) => {
   try {
-    const response = await api.post("/time-records/clock", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.post("/time-records/clock", formData);
 
     // Axios já retorna o body em response.data
     return response.data;
