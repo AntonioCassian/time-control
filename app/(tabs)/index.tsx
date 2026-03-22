@@ -5,6 +5,7 @@ import { Header } from '@/components/header';
 import { TimeCircle } from '@/components/time_aside';
 import { Card } from '@/components/ui/card';
 import { TimeRecordsMe } from '@/services/timerecors-me';
+import { RecordToday } from '@/services/todayServices';
 
 type Record = {
   id: number;
@@ -33,15 +34,15 @@ export default function Home() {
   useEffect(() => {
     const fetchRecords = async () => {
       try {
-        const data = await TimeRecordsMe();
+        const data = await RecordToday();
 
-        // Filtra registros do dia atual
-        const todayRecords = data.filter((item: any) => {
-          const recordDate = item.created_at.split('T')[0];
-          return recordDate === todayStr;
-        });
+        // // Filtra registros do dia atual
+        // const todayRecords = data.filter((item: any) => {
+        //   const recordDate = item.created_at.split('T')[0];
+        //   return recordDate === todayStr;
+        // });
 
-        setRecords(todayRecords);
+        setRecords(data);
       } catch (error) {
         console.log("Erro ao buscar histórico:", error);
       }
@@ -49,6 +50,7 @@ export default function Home() {
 
     fetchRecords();
   }, []);
+
 
   return (
     <View className="flex-1 bg-gray-100">
