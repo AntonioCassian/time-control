@@ -6,6 +6,14 @@ import { TimeCircle } from '@/components/time_aside';
 import { Card } from '@/components/ui/card';
 import { TimeRecordsMe } from '@/services/timerecors-me';
 
+type Record = {
+  id: number;
+  event_type: string;
+  created_at: string;
+  hours?: number;
+};
+
+
 const HistoryItem = ({ label, time }: { label: string; time: string }) => (
   <View className="flex-row items-center justify-between py-3 border-b border-gray-200">
     <Text className="text-base font-medium text-gray-700">{label}</Text>
@@ -15,9 +23,12 @@ const HistoryItem = ({ label, time }: { label: string; time: string }) => (
 
 export default function Home() {
   const [records, setRecords] = useState<any[]>([]);
-
   const today = new Date();
-  const todayStr = today.toISOString().split('T')[0]; // "2026-03-22"
+  const todayStr = today.toISOString().split('T')[0];
+
+  const addRecord = (newRecord: Record) => {
+    setRecords((prev) => [...prev, newRecord]);
+  };
 
   useEffect(() => {
     const fetchRecords = async () => {
@@ -26,7 +37,7 @@ export default function Home() {
 
         // Filtra registros do dia atual
         const todayRecords = data.filter((item: any) => {
-          const recordDate = item.created_at.split('T')[0]; // Pega "YYYY-MM-DD"
+          const recordDate = item.created_at.split('T')[0];
           return recordDate === todayStr;
         });
 
@@ -50,7 +61,7 @@ export default function Home() {
 
         {/* Card principal */}
         <View className="mt-4">
-          <TimeCircle hours={32} goal={44} />
+          <TimeCircle records={records} dailyGoal={8} addRecord={addRecord} />
         </View>
 
         {/* Histórico */}
@@ -63,7 +74,7 @@ export default function Home() {
             records.map((record) => (
               <HistoryItem
                 key={record.id}
-                label={record.event_type} // agora pega o tipo do evento
+                label={record.event_type}
                 time={new Date(record.created_at).toLocaleTimeString('pt-BR', {
                   hour: '2-digit',
                   minute: '2-digit',

@@ -9,15 +9,24 @@ import { postClock } from "@/services/dot";
 
 import { MyButton } from "./button";
 
+type Record = {
+  id: number;
+  event_type: string;
+  created_at: string;
+  hours?: number;
+};
+
 type CameraProps = {
     setOpen: Dispatch<SetStateAction<boolean>>;
     location: any;
+    eventType: string;
+    addRecord?: (record: Record) => void;
 };
 
 type CameraFacing = "front" | "back";
 type CameraFlash = "on" | "off" | "auto";
 
-export const Camera = ({ setOpen, location }: CameraProps) => {
+export const Camera = ({ setOpen, location, eventType, addRecord }: CameraProps) => {
     const [cameraReady, setCameraReady] = useState(false);
     const [cameraFlash, setCameraFlash] = useState<CameraFlash>("off");
     const [photoFile, setPhotoFile] = useState<string | null>(null);
@@ -38,36 +47,45 @@ export const Camera = ({ setOpen, location }: CameraProps) => {
 
 
     const handleSend = async () => {
-        if (!photoFile || !location) return;
+    if (!photoFile || !location) return;
 
-        const formData = new FormData();
+    const formData = new FormData();
+    formData.append("event_type", eventType);
+    formData.append("latitude", String(location.coords.latitude));
+    formData.append("longitude", String(location.coords.longitude));
 
-        formData.append("event_type", "entrada");
-        formData.append("latitude", String(location.coords.latitude));
-        formData.append("longitude", String(location.coords.longitude));
+    if (Platform.OS === "web") {
+        const photoResponse = await fetch(photoFile);
+        const photoBlob = await photoResponse.blob();
+        formData.append("photo", photoBlob, "photo.jpg");
+    } else {
+        formData.append("photo", {
+            uri: photoFile,
+            name: "photo.jpg",
+            type: "image/jpeg",
+        } as any);
+    }
 
-        if (Platform.OS === "web") {
-            const photoResponse = await fetch(photoFile);
-            const photoBlob = await photoResponse.blob();
-            formData.append("photo", photoBlob, "photo.jpg");
-        } else {
-            formData.append("photo", {
-                uri: photoFile,
-                name: "photo.jpg",
-                type: "image/jpeg",
-            } as any);
+    try {
+        const result = await postClock(formData);
+        console.log("Enviado com sucesso:", result);
+
+        // ADICIONA O REGISTRO LOCALMENTE
+        if (addRecord) {
+            addRecord({
+                id: new Date().getTime(),
+                event_type: eventType,
+                created_at: new Date().toISOString(),
+                hours: 0,
+            });
         }
 
-        try {
-            const result = await postClock(formData);
-            console.log("Enviado com sucesso:", result);
-
-            setPhotoFile(null);
-            setOpen(false);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+        setPhotoFile(null);
+        setOpen(false);
+    } catch (error) {
+        console.log(error);
+    }
+};
 
     return (
         <View style={{ flex: 1 }}>

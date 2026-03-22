@@ -8,18 +8,90 @@ import { MyButton } from "./ui/button";
 import { Camera } from "./ui/camera";
 import { Card } from "./ui/card";
 
-export const TimeCircle = ({
-  hours = 50,
-  goal = 100,
-}: {
+export type Record = {
+  id: number;
+  event_type: string; // "entrada", "saida", "retorno", etc
+  created_at: string; // ISO string
   hours?: number;
-  goal?: number;
-}) => {
-  const percentage = Math.min((hours / goal) * 100, 100);
+};
 
+type TimeCircleProps = {
+  records?: Record[];
+  dailyGoal?: number;
+  addRecord?: (record: Record) => void;
+};
+
+export const TimeCircle = ({
+  records = [],
+  dailyGoal = 8,
+  addRecord,
+}: TimeCircleProps) => {
+  // Função para calcular horas totais do dia
+  const calculateTotalHours = (records: Record[]) => {
+    let total = 0;
+    let lastEntry: Date | null = null;
+
+    const sorted = [...records].sort(
+      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+
+    sorted.forEach((r) => {
+      const type = r.event_type.toLowerCase();
+      if (type === "entrada") {
+        lastEntry = new Date(r.created_at);
+      } else if ((type === "saida" || type === "retorno") && lastEntry) {
+        const exitTime = new Date(r.created_at);
+        const diff = (exitTime.getTime() - lastEntry.getTime()) / 1000 / 3600; // horas
+        total += diff > 0 ? diff : 0;
+        lastEntry = null;
+      }
+    });
+
+    return total;
+  };
+
+  const totalHours = calculateTotalHours(records);
+  const percentage = Math.min((totalHours / dailyGoal) * 100, 100);
+
+  // Próximo evento
+  const eventsOrder = ["Entrada", "Saida", "Retorno", "Saida"];
+  const nextEvent =
+    eventsOrder.find(
+      (e) => !records.some((r) => r.event_type.toLowerCase() === e)
+    ) || "Nenhum";
+
+  // Cor do próximo evento
+  const nextEventColor = (() => {
+    switch (nextEvent.toLowerCase()) {
+      case "Entrada":
+        return "#1d4ed8"; // azul
+      case "Saida":
+        return "#dc2626"; // vermelho
+      case "Retorno":
+        return "#16a34a"; // verde
+      default:
+        return "#1e40af"; // azul escuro padrão
+    }
+  })();
+
+  const nextEventBg = (() => {
+    switch (nextEvent.toLowerCase()) {
+      case "entrada":
+        return "#DBEAFE"; // azul claro
+      case "saida":
+        return "#FEE2E2"; // vermelho claro
+      case "retorno":
+        return "#DCFCE7"; // verde claro
+      default:
+        return "#E0E7FF"; // azul escuro claro
+    }
+  })();
+
+  // Câmera
   const [permission, requestPermission] = useCameraPermissions();
   const [open, setOpen] = useState(false);
 
+  // Localização
   const { location, errorMsg, loading, refreshLocation } = useLocation();
 
   if (!permission) return <View />;
@@ -37,82 +109,64 @@ export const TimeCircle = ({
 
   return (
     <>
+      {/* Modal da câmera */}
       <Modal visible={open} animationType="slide">
-        <Camera setOpen={setOpen} location={location} />
+        <Camera
+          setOpen={setOpen}
+          location={location}
+          eventType={nextEvent}
+          addRecord={addRecord}
+        />
       </Modal>
 
       <Card className="p-5 bg-white shadow-sm rounded-2xl">
-        {/* LOCALIZAÇÃO */}
+        {/* Localização */}
         <View className="items-center mb-4">
-          {!location && (<Text className="text-sm text-gray-500">
-            Verificação de localização
-          </Text>)}
-
-          {loading && (
-            <Text className="mt-1 text-xs text-gray-400">
-              📍 Obtendo localização...
-            </Text>
+          {!location && (
+            <Text className="text-sm text-gray-500">Verificação de localização</Text>
           )}
-
+          {loading && (
+            <Text className="mt-1 text-xs text-gray-400">📍 Obtendo localização...</Text>
+          )}
           {errorMsg && (
             <>
-              <Text className="mt-1 text-xs text-red-500">
-                {errorMsg}
-              </Text>
-
-              <MyButton
-                title="Ativar localização"
-                onPress={refreshLocation}
-              />
+              <Text className="mt-1 text-xs text-red-500">{errorMsg}</Text>
+              <MyButton title="Ativar localização" onPress={refreshLocation} />
             </>
           )}
-
-          {/* {location && (
-            <>
-              <Text className="mt-1 text-xs text-green-600">
-                📍 Localização ativa
-              </Text>
-
-              <Text className="text-[10px] text-gray-400">
-                Lat: {location.coords.latitude.toFixed(4)} | Lng:{" "}
-                {location.coords.longitude.toFixed(4)}
-              </Text>
-            </>
-          )} */}
         </View>
 
-        {/* CÍRCULO */}
+        {/* Círculo de horas */}
         <View className="items-center justify-center mb-4">
           <View className="items-center justify-center w-32 h-32 border-8 border-green-500 rounded-full">
             <Text className="text-3xl font-bold text-gray-800">
-              {hours}h
+              {totalHours.toFixed(2)}h
             </Text>
           </View>
-
           <View className="px-3 py-1 mt-3 bg-green-100 rounded-full">
             <Text className="text-xs font-semibold text-green-700">
-              {percentage.toFixed(0)}% da meta
+              {percentage.toFixed(0)}% da meta diária
             </Text>
           </View>
         </View>
 
-        {/* PRÓXIMA AÇÃO */}
-        <View className="flex-row items-center justify-center gap-2 p-2 mb-4 bg-blue-100 rounded-full">
-          <MaterialIcons name="schedule" size={18} color="#1d4ed8" />
-          <Text className="text-sm font-semibold text-blue-700">
-            Próximo: Entrada
+        {/* Próximo evento com cor */}
+        {/* <View
+          className="flex-row items-center justify-center gap-2 p-2 mb-4 rounded-full"
+          style={{ backgroundColor: nextEventBg }}
+        >
+          <MaterialIcons name="schedule" size={18} color={nextEventColor} />
+          <Text className="text-sm font-semibold" style={{ color: nextEventColor }}>
+            Próximo: {nextEvent.charAt(0).toUpperCase() + nextEvent.slice(1)}
           </Text>
-        </View>
+        </View> */}
 
-        {/* PROGRESSO */}
+        {/* Barra de progresso */}
         <View className="h-2 mb-4 overflow-hidden bg-gray-200 rounded-full">
-          <View
-            className="h-full bg-green-500"
-            style={{ width: `${percentage}%` }}
-          />
+          <View className="h-full bg-green-500" style={{ width: `${percentage}%` }} />
         </View>
 
-        {/* BOTÃO */}
+        {/* Botão registrar ponto */}
         <MyButton
           title="Registrar Ponto"
           onPress={() => {
@@ -120,7 +174,6 @@ export const TimeCircle = ({
               alert("Ative a localização primeiro");
               return;
             }
-
             setOpen(true);
           }}
         />
