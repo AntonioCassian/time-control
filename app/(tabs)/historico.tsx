@@ -132,6 +132,8 @@ export default function Historico() {
 
   const diasTrabalhados = dias.length;
 
+  console.log(dias)
+
   return (
     <ScrollView
       className="flex-1 bg-gray-100"
