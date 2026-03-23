@@ -8,33 +8,40 @@ import { MyButton } from "./ui/button";
 import { Camera } from "./ui/camera";
 import { Card } from "./ui/card";
 
-export type Record = {
+export type TimeRecord = {
   id: number;
   event_type: string;
   created_at: string;
   hours?: number;
 };
-
 type TimeCircleProps = {
-  records?: Record[];
+  records?: TimeRecord[];
   dailyGoal?: number;
-  addRecord?: (record: Record) => void;
+  addRecord?: (record: TimeRecord) => void;
 };
+
+
 
 export const TimeCircle = ({
   records = [],
   dailyGoal = 8,
   addRecord,
 }: TimeCircleProps) => {
-  // Calcular horas
-  const calculateTotalHours = (records: Record[]) => {
+  // garante que nunca seja null
+  const safeRecords = records ?? [];
+
+  // Função para capitalizar
+  const capitalize = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+  // CALCULAR HORAS
+  const calculateTotalHours = (records: TimeRecord[]) => {
     let total = 0;
     let lastEntry: Date | null = null;
 
     const sorted = [...records].sort(
       (a, b) =>
-        new Date(a.created_at).getTime() -
-        new Date(b.created_at).getTime()
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     );
 
     sorted.forEach((r) => {
@@ -44,9 +51,7 @@ export const TimeCircle = ({
         lastEntry = new Date(r.created_at);
       } else if ((type === "saida" || type === "retorno") && lastEntry) {
         const exitTime = new Date(r.created_at);
-        const diff =
-          (exitTime.getTime() - lastEntry.getTime()) / 1000 / 3600;
-
+        const diff = (exitTime.getTime() - lastEntry.getTime()) / 1000 / 3600;
         total += diff > 0 ? diff : 0;
         lastEntry = null;
       }
@@ -55,53 +60,42 @@ export const TimeCircle = ({
     return total;
   };
 
-  const totalHours = calculateTotalHours(records);
-
-  // 🔥 porcentagem corrigida
+  const totalHours = calculateTotalHours(safeRecords);
   const rawPercentage = (totalHours / dailyGoal) * 100;
   const percentage = Math.min(Math.round(rawPercentage), 100);
-
   const goalCompleted = totalHours >= dailyGoal;
 
-  // Próximo evento
+  // PRÓXIMO EVENTO
   const eventsOrder = ["entrada", "saida", "retorno", "saida"];
-  const nextEvent =
+  const nextEventRaw =
     eventsOrder.find(
-      (e) => !records.some((r) => r.event_type.toLowerCase() === e)
+      (e) => !safeRecords.some((r) => r.event_type.toLowerCase() === e)
     ) || "nenhum";
+  const nextEvent = capitalize(nextEventRaw);
 
-  // Cores
-  const nextEventColor = (() => {
-    switch (nextEvent) {
-      case "entrada":
-        return "#1d4ed8";
-      case "saida":
-        return "#dc2626";
-      case "retorno":
-        return "#16a34a";
-      default:
-        return "#1e40af";
-    }
-  })();
+  // MAPA DE CORES
+  const eventColors: Record<string, string> = {
+    Entrada: "#1d4ed8",
+    Saida: "#dc2626",
+    Retorno: "#16a34a",
+    Nenhum: "#1e40af",
+  };
 
-  const nextEventBg = (() => {
-    switch (nextEvent) {
-      case "entrada":
-        return "#DBEAFE";
-      case "saida":
-        return "#FEE2E2";
-      case "retorno":
-        return "#DCFCE7";
-      default:
-        return "#E0E7FF";
-    }
-  })();
+  const eventBgColors: Record<string, string> = {
+    Entrada: "#DBEAFE",
+    Saida: "#FEE2E2",
+    Retorno: "#DCFCE7",
+    Nenhum: "#E0E7FF",
+  };
 
-  // Câmera
+  const nextEventColor = eventColors[nextEvent] ?? "#1e40af";
+  const nextEventBg = eventBgColors[nextEvent] ?? "#E0E7FF";
+
+  // CÂMERA
   const [permission, requestPermission] = useCameraPermissions();
   const [open, setOpen] = useState(false);
 
-  // Localização
+  // LOCALIZAÇÃO
   const { location, errorMsg, loading, refreshLocation } = useLocation();
 
   if (!permission) return <View />;
@@ -159,9 +153,7 @@ export const TimeCircle = ({
         <View className="items-center justify-center mb-4">
           <View
             className="items-center justify-center w-32 h-32 border-8 rounded-full"
-            style={{
-              borderColor: goalCompleted ? "#2563eb" : "#22c55e",
-            }}
+            style={{ borderColor: goalCompleted ? "#2563eb" : "#22c55e" }}
           >
             <Text className="text-3xl font-bold text-gray-800">
               {totalHours.toFixed(2)}h
@@ -174,7 +166,6 @@ export const TimeCircle = ({
             </Text>
           </View>
 
-          {/* 🎉 Meta concluída */}
           {goalCompleted && (
             <View className="px-4 py-2 mt-3 bg-blue-100 rounded-full">
               <Text className="text-sm font-semibold text-blue-700">
@@ -189,26 +180,15 @@ export const TimeCircle = ({
           className="flex-row items-center justify-center gap-2 p-2 mb-4 rounded-full"
           style={{ backgroundColor: nextEventBg }}
         >
-          <MaterialIcons
-            name="schedule"
-            size={18}
-            color={nextEventColor}
-          />
-          <Text
-            className="text-sm font-semibold"
-            style={{ color: nextEventColor }}
-          >
-            Próximo:{" "}
-            {nextEvent.charAt(0).toUpperCase() + nextEvent.slice(1)}
+          <MaterialIcons name="schedule" size={18} color={nextEventColor} />
+          <Text className="text-sm font-semibold" style={{ color: nextEventColor }}>
+            Próximo: {nextEvent}
           </Text>
         </View>
 
         {/* Barra */}
         <View className="h-2 mb-4 overflow-hidden bg-gray-200 rounded-full">
-          <View
-            className="h-full bg-green-500"
-            style={{ width: `${percentage}%` }}
-          />
+          <View className="h-full bg-green-500" style={{ width: `${percentage}%` }} />
         </View>
 
         {/* Botão */}

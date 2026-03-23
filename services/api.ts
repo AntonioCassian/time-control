@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_BASE_URL,
-  timeout: 10000,
+  timeout: 15000,
 });
 
 api.interceptors.request.use(
@@ -25,4 +25,29 @@ api.interceptors.request.use(
   (error) => {
     return Promise.reject(error);
   },
+);
+
+
+api.interceptors.response.use(
+  (response) => response, // deixa passar respostas válidas
+  async (error) => {
+    // Se receber erro 401 (não autorizado) ou qualquer outro que você queira tratar
+    if (error.response?.status === 401) {
+      // Remove token
+      await AsyncStorage.removeItem("access_token");
+
+      // Aqui você precisa ter acesso à navegação para redirecionar
+      // Exemplo usando React Navigation:
+      // navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 0,
+      //     routes: [{ name: 'Login' }],
+      //   })
+      // );
+
+      console.log("Token inválido, usuário deslogado e redirecionado para login");
+    }
+
+    return Promise.reject(error); // propaga o erro caso queira tratar localmente
+  }
 );

@@ -72,8 +72,8 @@ export default function Home() {
             Hoje
           </Text>
 
-          {records.length > 0 ? (
-            records.map((record) => (
+          {(records || []).length > 0 ? (
+            (records || []).map((record) => (
               <HistoryItem
                 key={record.id}
                 label={record.event_type}
