@@ -2,9 +2,9 @@
   "expo": {
     "name": "time-control",
     "slug": "time-control",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/time-control-logo.png",
     "scheme": "timecontrol",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
