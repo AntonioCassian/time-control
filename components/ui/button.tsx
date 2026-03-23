@@ -4,12 +4,13 @@ interface  ButtonProps{
     title: string;
     onPress?: () => void;
     className?: string;
+    disabled?: boolean
 }
 
-export const MyButton = ({title, onPress, className}: ButtonProps) => {
+export const MyButton = ({title, onPress, className, disabled}: ButtonProps) => {
     return (
         <>
-            <TouchableOpacity style={{
+            <TouchableOpacity disabled={disabled} style={{
                 shadowColor: "#000000",
                 shadowOffset: {
                     width: 0,

@@ -4,7 +4,6 @@ import { ScrollView, Text, View } from 'react-native';
 import { Header } from '@/components/header';
 import { TimeCircle } from '@/components/time_aside';
 import { Card } from '@/components/ui/card';
-import { TimeRecordsMe } from '@/services/timerecors-me';
 import { RecordToday } from '@/services/todayServices';
 
 type Record = {
@@ -14,6 +13,12 @@ type Record = {
   hours?: number;
 };
 
+type ApiResponse = {
+  data: Record[];
+  expected_hours: number;
+  next_event_type: string;
+  worked_hours: number;
+};
 
 const HistoryItem = ({ label, time }: { label: string; time: string }) => (
   <View className="flex-row items-center justify-between py-3 border-b border-gray-200">
@@ -23,34 +28,35 @@ const HistoryItem = ({ label, time }: { label: string; time: string }) => (
 );
 
 export default function Home() {
-  const [records, setRecords] = useState<any[]>([]);
-  const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
+  const [records, setRecords] = useState<Record[]>([]);
+  const [workedHours, setWorkedHours] = useState(0);
+  const [expectedHours, setExpectedHours] = useState(8);
+  const [nextEventType, setNextEventType] = useState('');
 
-  const addRecord = (newRecord: Record) => {
+  const fetchRecords = async () => {
+    try {
+      const response: ApiResponse = await RecordToday();
+
+      // pega corretamente os dados
+      setRecords(response.data);
+      setWorkedHours(response.worked_hours);
+      setExpectedHours(response.expected_hours);
+      setNextEventType(response.next_event_type);
+
+    } catch (error) {
+      console.log("Erro ao buscar histórico:", error);
+    }
+  };
+
+  const addRecord = async (newRecord: Record) => {
     setRecords((prev) => [...prev, newRecord]);
+
+    await fetchRecords();
   };
 
   useEffect(() => {
-    const fetchRecords = async () => {
-      try {
-        const data = await RecordToday();
-
-        // // Filtra registros do dia atual
-        // const todayRecords = data.filter((item: any) => {
-        //   const recordDate = item.created_at.split('T')[0];
-        //   return recordDate === todayStr;
-        // });
-
-        setRecords(data);
-      } catch (error) {
-        console.log("Erro ao buscar histórico:", error);
-      }
-    };
-
     fetchRecords();
   }, []);
-
 
   return (
     <View className="flex-1 bg-gray-100">
@@ -63,7 +69,12 @@ export default function Home() {
 
         {/* Card principal */}
         <View className="mt-4">
-          <TimeCircle records={records} dailyGoal={8} addRecord={addRecord} />
+          <TimeCircle
+            dailyGoal={expectedHours}
+            workedHours={workedHours}
+            nextEventType={nextEventType}
+            addRecord={addRecord}
+          />
         </View>
 
         {/* Histórico */}
@@ -72,8 +83,8 @@ export default function Home() {
             Hoje
           </Text>
 
-          {(records || []).length > 0 ? (
-            (records || []).map((record) => (
+          {records.length > 0 ? (
+            records.map((record) => (
               <HistoryItem
                 key={record.id}
                 label={record.event_type}
