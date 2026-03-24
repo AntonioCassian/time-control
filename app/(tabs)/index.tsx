@@ -21,7 +21,7 @@ type ApiResponse = {
 };
 
 const HistoryItem = ({ label, time }: { label: string; time: string }) => (
-  <View className="flex-row items-center justify-between py-3 border-b border-gray-200">
+  <View className="flex-row items-center justify-between border-b border-gray-200 py-3">
     <Text className="text-base font-medium text-gray-700">{label}</Text>
     <Text className="text-base font-bold text-gray-900">{time}</Text>
   </View>
@@ -79,11 +79,11 @@ export default function Home() {
 
         {/* Histórico */}
         <Card>
-          <Text className="mb-4 text-sm font-bold text-gray-500 uppercase">
+          <Text className="mb-4 text-sm font-bold uppercase text-gray-500">
             Hoje
           </Text>
 
-          {records.length > 0 ? (
+          {records?.length ? (
             records.map((record) => (
               <HistoryItem
                 key={record.id}

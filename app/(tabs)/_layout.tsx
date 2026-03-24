@@ -1,5 +1,5 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Tabs, useRouter } from "expo-router";
+import { Redirect, Tabs, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Platform } from "react-native";
@@ -11,11 +11,17 @@ import { useAuth } from "@/providers/AuthProvider";
 export default function TabLayout() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
-    }
-  }, [isAuthenticated, isLoading]);
+  if (isLoading) {
+    return null;
+  }
+  if (!isAuthenticated) {
+    return <Redirect href="/(auth)/login" />;
+  }
+  // useEffect(() => {
+  //   if (!isLoading && !isAuthenticated) {
+  //     return router.replace('/login');
+  //   }
+  // }, [isAuthenticated, isLoading, router]);
   return (
     <>
       <StatusBar style="auto" translucent={true} />

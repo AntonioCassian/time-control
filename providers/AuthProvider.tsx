@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { api } from "@/services/api";
@@ -16,6 +17,7 @@ const AuthContext = createContext({} as AuthContextProps);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter()
 
     useEffect(() => {
         const loadToken = async () => {
@@ -37,12 +39,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             await AsyncStorage.setItem('access_token', accessToken);
         } catch (error) {
             console.error('Erro ao fazer login:', error);
-            throw error; 
+            throw error;
         }
     };
     const logout = async () => {
+        if (!token) return;
+
         setToken(null);
         await AsyncStorage.removeItem('access_token');
+        return router.replace('/(auth)/login');
     };
 
     return (
