@@ -87,9 +87,9 @@ export const TimeCircle = ({
         />
       </Modal>
 
-      <Card className="p-5 bg-white shadow-sm rounded-2xl">
+      <Card className="rounded-2xl bg-white p-5 shadow-sm">
         {/* localização */}
-        <View className="items-center mb-4">
+        <View className="mb-4 items-center">
           {!location && (
             <Text className="text-sm text-gray-500">
               Verificação de localização
@@ -116,9 +116,9 @@ export const TimeCircle = ({
         </View>
 
         {/* círculo */}
-        <View className="items-center justify-center mb-4">
+        <View className="mb-4 items-center justify-center">
           <View
-            className="items-center justify-center w-32 h-32 border-8 rounded-full"
+            className="h-32 w-32 items-center justify-center rounded-full border-8"
             style={{
               borderColor: goalCompleted ? "#2563eb" : "#22c55e",
             }}
@@ -128,7 +128,7 @@ export const TimeCircle = ({
             </Text>
           </View>
 
-          <View className="px-3 py-1 mt-3 bg-green-100 rounded-full">
+          <View className="mt-3 rounded-full bg-green-100 px-3 py-1">
             <Text className="text-xs font-semibold text-green-700">
               {percentage}% da meta diária
             </Text>
@@ -137,7 +137,7 @@ export const TimeCircle = ({
 
         {/* próximo evento */}
         <View
-          className="flex-row items-center justify-center gap-2 p-2 mb-4 rounded-full"
+          className="mb-4 flex-row items-center justify-center gap-2 rounded-full p-2"
           style={{ backgroundColor: nextEventBg }}
         >
           <MaterialIcons
@@ -154,7 +154,7 @@ export const TimeCircle = ({
         </View>
 
         {/* barra */}
-        <View className="h-2 mb-4 overflow-hidden bg-gray-200 rounded-full">
+        <View className="mb-4 h-2 overflow-hidden rounded-full bg-gray-200">
           <View
             className="h-full bg-green-500"
             style={{ width: `${percentage}%` }}
@@ -163,14 +163,15 @@ export const TimeCircle = ({
 
         {/* botão */}
         <MyButton
-  title={
-    goalCompleted
-      ? "Meta diária concluída 🎉"
-      : `Registrar ${nextEvent}`
-  }
-  disabled={goalCompleted}
-  className={goalCompleted ? "bg-gray-400" : ""}
-/>
+          title={
+            goalCompleted
+              ? "Meta diária concluída 🎉"
+              : `Registrar ${nextEvent}`
+          }
+          disabled={goalCompleted}
+          className={goalCompleted ? "bg-gray-400" : ""}
+          onPress={() => setOpen(true)}
+        />
       </Card>
     </>
   );
