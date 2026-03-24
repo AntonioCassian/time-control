@@ -2,7 +2,7 @@
   "expo": {
     "name": "time-control",
     "slug": "time-control",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/time-control-logo.png",
     "scheme": "timecontrol",
