@@ -3,7 +3,7 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import { CameraView } from "expo-camera";
 import { Image } from "expo-image";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { ActivityIndicator, Platform, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Platform, Text, TouchableOpacity, View } from "react-native";
 
 import { postClock } from "@/services/dot";
 
@@ -48,6 +48,17 @@ export const Camera = ({ setOpen, location, eventType, addRecord }: CameraProps)
   const capEventType = capitalize(eventType);
 
   const handleSend = async () => {
+
+    if (!photoFile) {
+      Alert.alert("❌ Sem foto");
+      return;
+    }
+
+    if (!location?.coords) {
+      console.log("❌ Sem localização", location);
+      Alert.alert("Localização ainda não carregou");
+      return;
+    }
     if (!photoFile || !location?.coords) return;
 
     setIsLoading(true); // ✅ inicia loading
@@ -113,7 +124,7 @@ export const Camera = ({ setOpen, location, eventType, addRecord }: CameraProps)
             <MyButton
               title="Enviar Foto"
               onPress={handleSend}
-              disabled={isLoading} // desabilita botão enquanto envia
+              disabled={isLoading}
             />
             {isLoading && (
               <View className="absolute inset-0 items-center justify-center bg-black bg-opacity-50">
