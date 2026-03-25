@@ -21,7 +21,6 @@ export const Header = () => {
     
     return (
         <View className="flex-row items-center justify-between">
-            {/* Lado esquerdo */}
             <View>
                 <Text className="text-sm text-gray-500">Olá 👋</Text>
                 <Text className="text-2xl font-bold text-gray-900">
@@ -33,9 +32,7 @@ export const Header = () => {
                 </Text>
             </View>
 
-            {/* Lado direito */}
             <View className="flex-row items-center gap-3">
-                {/* Notificação */}
                 <View
                     onTouchEnd={() => router.push('/notifications')}
                     className="relative items-center justify-center w-10 h-10 bg-white rounded-full shadow-sm">

@@ -98,7 +98,7 @@ export const Camera = ({ setOpen, location, eventType, addRecord }: CameraProps)
     } catch (error) {
       console.error(error);
     } finally {
-      setIsLoading(false); // ✅ termina loading
+      setIsLoading(false);
     }
   };
 

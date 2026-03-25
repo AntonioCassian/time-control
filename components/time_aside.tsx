@@ -82,14 +82,14 @@ export const TimeCircle = ({
         <Camera
           setOpen={setOpen}
           location={location}
-          eventType={nextEventType} // ✅ direto da API
+          eventType={nextEventType} 
           addRecord={addRecord}
         />
       </Modal>
 
-      <Card className="rounded-2xl bg-white p-5 shadow-sm">
-        {/* localização */}
-        <View className="mb-4 items-center">
+      <Card className="p-5 bg-white shadow-sm rounded-2xl">
+       
+        <View className="items-center mb-4">
           {!location && (
             <Text className="text-sm text-gray-500">
               Verificação de localização
@@ -115,10 +115,10 @@ export const TimeCircle = ({
           )}
         </View>
 
-        {/* círculo */}
-        <View className="mb-4 items-center justify-center">
+  
+        <View className="items-center justify-center mb-4">
           <View
-            className="h-32 w-32 items-center justify-center rounded-full border-8"
+            className="items-center justify-center w-32 h-32 border-8 rounded-full"
             style={{
               borderColor: goalCompleted ? "#2563eb" : "#22c55e",
             }}
@@ -128,16 +128,16 @@ export const TimeCircle = ({
             </Text>
           </View>
 
-          <View className="mt-3 rounded-full bg-green-100 px-3 py-1">
+          <View className="px-3 py-1 mt-3 bg-green-100 rounded-full">
             <Text className="text-xs font-semibold text-green-700">
               {percentage}% da meta diária
             </Text>
           </View>
         </View>
 
-        {/* próximo evento */}
+     
         <View
-          className="mb-4 flex-row items-center justify-center gap-2 rounded-full p-2"
+          className="flex-row items-center justify-center gap-2 p-2 mb-4 rounded-full"
           style={{ backgroundColor: nextEventBg }}
         >
           <MaterialIcons
@@ -153,15 +153,13 @@ export const TimeCircle = ({
           </Text>
         </View>
 
-        {/* barra */}
-        <View className="mb-4 h-2 overflow-hidden rounded-full bg-gray-200">
+        <View className="h-2 mb-4 overflow-hidden bg-gray-200 rounded-full">
           <View
             className="h-full bg-green-500"
             style={{ width: `${percentage}%` }}
           />
         </View>
 
-        {/* botão */}
         <MyButton
           title={
             goalCompleted

@@ -29,11 +29,10 @@ api.interceptors.request.use(
 
 
 api.interceptors.response.use(
-  (response) => response, // deixa passar respostas válidas
+  (response) => response, 
   async (error) => {
-    // Se receber erro 401 (não autorizado) ou qualquer outro que você queira tratar
     if (error.response?.status === 401) {
-      // Remove token
+   
       await AsyncStorage.removeItem("access_token");
 
       // Aqui você precisa ter acesso à navegação para redirecionar

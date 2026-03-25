@@ -11,7 +11,6 @@ export const useLocation = () => {
     try {
       setLoading(true);
 
-      // 🔍 Verifica se GPS está ligado
       const enabled = await Location.hasServicesEnabledAsync();
 
       if (!enabled) {
@@ -20,7 +19,6 @@ export const useLocation = () => {
         return;
       }
 
-      // 🔐 Permissão
       const { status, canAskAgain } =
         await Location.requestForegroundPermissionsAsync();
 
@@ -45,7 +43,6 @@ export const useLocation = () => {
         return;
       }
 
-      // 📍 Pega localização
       const current = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
       });
