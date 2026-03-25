@@ -105,11 +105,11 @@ export const Camera = ({ setOpen, location, eventType, addRecord }: CameraProps)
   return (
     <View style={{ flex: 1 }}>
       {showConfirmation ? (
-        <View className="flex-1 items-center justify-center bg-white px-6">
+        <View className="items-center justify-center flex-1 px-6 bg-white">
           <Text className="mb-4 text-2xl font-bold">✅ Foto enviada com sucesso!</Text>
           <MyButton
             title="Voltar"
-            className="rounded-lg bg-blue-500 px-6 py-3 font-bold text-white"
+            className="px-6 py-3 font-bold text-white bg-blue-500 rounded-lg"
             onPress={() => {
               setShowConfirmation(false);
               setOpen(false);
@@ -117,10 +117,10 @@ export const Camera = ({ setOpen, location, eventType, addRecord }: CameraProps)
           />
         </View>
       ) : photoFile ? (
-        <View className="flex-1 justify-between bg-black">
+        <View className="justify-between flex-1 bg-black">
           <Image source={{ uri: photoFile }} style={{ width: "100%", height: "80%" }} />
-          <View className="flex-row justify-between p-4">
-            <MyButton title="Nova Foto" onPress={() => setPhotoFile(null)} />
+          <View className="flex-row items-center justify-between p-4 bg-[#161515]">
+            <MyButton className="!bg-transparent" title="Nova Foto" onPress={() => setPhotoFile(null)} />
             <MyButton
               title="Enviar Foto"
               onPress={handleSend}
@@ -157,10 +157,10 @@ export const Camera = ({ setOpen, location, eventType, addRecord }: CameraProps)
             </TouchableOpacity>
           </View>
 
-          <View className="absolute bottom-10 w-full flex-row justify-center">
+          <View className="absolute flex-row justify-center w-full bottom-10">
             <TouchableOpacity onPress={handleTakePicture}>
               <View className="border-[6px] h-24 w-24 rounded-full border-white p-2">
-                <View className="flex-1 rounded-full bg-white" />
+                <View className="flex-1 bg-white rounded-full" />
               </View>
             </TouchableOpacity>
           </View>
